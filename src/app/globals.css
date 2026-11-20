@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-rust-700: #7f3009;
+  --color-rust-600: #9a3f12;
+  --color-rust-500: #b4501c;
+  --color-brown-900: #4a2210;
+  --color-brown-800: #5e2e17;
+  --color-cream-50: #fffcf8;
+  --color-cream-100: #fbf5ec;
+  --color-peach-100: #fbe8d6;
+  --color-peach-200: #f5d9be;
+  --color-sand-300: #e8c9a0;
+  --color-sand-200: #f0dcc0;
+  --color-ink-900: #1f1b18;
+  --color-ink-700: #3b3430;
+  --color-ink-500: #6b5f57;
+  --color-line: #ebddcb;
+  --color-leaf-600: #4e7a3a;
+  --color-rose-500: #d9534f;
+
+  --shadow-soft: 0 10px 30px -12px rgba(122, 52, 16, 0.18);
+  --shadow-lift: 0 18px 40px -14px rgba(122, 52, 16, 0.32);
+}
+
+body {
+  background: var(--color-cream-50);
+  color: var(--color-ink-700);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid rgb(154 63 18 / 0.4);
+  outline-offset: 2px;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-8px, 8px); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes fastFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fastScaleIn {
+  from {
+    opacity: 0.65;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.anim-kenburns { animation: kenburns 18s ease-in-out infinite alternate; }
+.anim-drift { animation: drift 6s ease-in-out infinite; }
+.anim-sway { animation: sway 5s ease-in-out infinite; transform-origin: bottom left; }
+
+.anim-fast-fade-up {
+  animation: fastFadeUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.anim-fast-scale-in {
+  animation: fastScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.anim-delay-1 { animation-delay: 35ms; }
+.anim-delay-2 { animation-delay: 70ms; }
+.anim-delay-3 { animation-delay: 105ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-kenburns, .anim-drift, .anim-sway, .anim-fast-fade-up, .anim-fast-scale-in { animation: none; }
+  html { scroll-behavior: auto; }
+}
