@@ -103,7 +103,7 @@ export default function AboutPage() {
         </nav>
       </PageHero>
 
-      {/* Story */}
+      {/* Ngo Story */}
       <section id="story" className="scroll-mt-24 py-12 sm:py-16 md:py-24">
         <Container className="grid gap-8 sm:gap-12 lg:grid-cols-[0.8fr_1fr] lg:gap-20">
           <div className="lg:sticky lg:top-28 lg:self-start">
