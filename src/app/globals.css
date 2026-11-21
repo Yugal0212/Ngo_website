@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700;800&display=swap');
 
 @import 'tailwindcss';
 
 @theme {
-  --font-display: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Noto Sans Gujarati', 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Noto Sans Gujarati', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
   --color-rust-700: #7f3009;
   --color-rust-600: #9a3f12;

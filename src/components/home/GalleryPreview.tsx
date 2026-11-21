@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, ChevronRight, Heart, X, Maximize2 } from 'lucide
 
 import { Button } from '@/components/common/Button'
 import { IMAGES } from '@/lib/images'
+import { useLanguage } from '@/context/LanguageContext'
 
 type CollageItem = {
   id: string
@@ -162,6 +163,8 @@ export function GalleryPreview() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [activeIdx, handleNext, handlePrev])
 
+  const { isGu } = useLanguage()
+
   return (
     <section aria-labelledby="gallery-heading" className="relative overflow-hidden bg-cream-100 py-12 sm:py-16 md:py-24">
       <div className="mx-auto max-w-[1500px] px-4 sm:px-6 md:px-10 xl:px-[72px]">
@@ -170,22 +173,24 @@ export function GalleryPreview() {
           <div>
             <div className="flex items-center gap-2.5">
               <span className="font-display text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-rust-600">
-                Moments From The Sanctuary · गौसेवा दर्शन
+                {isGu ? 'ગૌશાળા દર્શન · પાવન ક્ષણો' : 'Moments From The Sanctuary · गौसेवा दर्शन'}
               </span>
               <span className="hidden h-px w-14 bg-rust-600/30 sm:inline-block" />
             </div>
             <p className="mt-1 text-[11px] sm:text-xs tracking-wider text-ink-500 uppercase">
-              GauSeva Compassion Archive
+              {isGu ? 'ગૌસેવા અને કરુણા આર્કાઇવ' : 'GauSeva Compassion Archive'}
             </p>
           </div>
 
           <div className="flex items-center justify-between md:justify-end gap-3">
-            <span className="text-[11px] sm:text-xs font-medium text-ink-500">Tap any photo to preview</span>
+            <span className="text-[11px] sm:text-xs font-medium text-ink-500">
+              {isGu ? 'તસવીર જોવા માટે ક્લિક કરો' : 'Tap any photo to preview'}
+            </span>
             <Link
               href="/gallery"
               className="inline-flex items-center gap-1 font-display text-xs sm:text-sm font-semibold text-rust-600 hover:text-rust-700 active:scale-95 transition-transform"
             >
-              All 15+ Photos
+              {isGu ? 'બધી ૧૫+ તસવીરો' : 'All 15+ Photos'}
               <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
@@ -223,37 +228,50 @@ export function GalleryPreview() {
               {/* Bold Editorial Headline */}
               <h2
                 id="gallery-heading"
-                className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase leading-[1.05] tracking-tight text-ink-900"
+                className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase leading-[1.1] tracking-tight text-ink-900"
               >
-                LIFE,<br />
-                EVERY DAY.<br />
-                <span className="text-rust-600">STORIES</span>
+                {isGu ? (
+                  <>
+                    અબોલ જીવોનું<br />
+                    પાવન જીવન.<br />
+                    <span className="text-rust-600">ગૌસેવા</span>
+                  </>
+                ) : (
+                  <>
+                    LIFE,<br />
+                    EVERY DAY.<br />
+                    <span className="text-rust-600">STORIES</span>
+                  </>
+                )}
               </h2>
 
               <p className="mt-3 sm:mt-5 text-xs sm:text-sm leading-relaxed text-ink-700">
-                A daily rhythm of devotion at our Vrindavan sanctuary: dawn gau-puja, nutritious green fodder distribution,
-                specialized veterinary care, and peaceful lifetime sanctuary.
+                {isGu
+                  ? 'ગૌશાળામાં નિત્ય સેવાનો પ્રવાહ: પ્રભાતે ગૌપૂજન, લીલા ઘાસચારાનું વિતરણ, અનુભવી પશુચિકિત્સક દ્વારા સારવાર અને અબોલ ગૌમાતાનું આજીવન જતન.'
+                  : 'A daily rhythm of devotion at our Vrindavan sanctuary: dawn gau-puja, nutritious green fodder distribution, specialized veterinary care, and peaceful lifetime sanctuary.'}
               </p>
 
               {/* Solid Accent Color Swatch Block */}
               <div className="mt-5 sm:mt-8 rounded-2xl bg-sand-300/85 p-4 sm:p-5 border border-sand-300">
                 <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-brown-900">
-                  <span>Sanctuary Care</span>
-                  <span>350+ Desi Cows</span>
+                  <span>{isGu ? 'ગૌશાળા સારસંભાળ' : 'Sanctuary Care'}</span>
+                  <span>{isGu ? '૩૫૦+ દેશી ગાયો' : '350+ Desi Cows'}</span>
                 </div>
                 <p className="mt-1.5 text-xs leading-relaxed text-ink-700 font-medium">
-                  Zero slaughter, zero commercial use, 100% unconditional seva and protection.
+                  {isGu
+                    ? 'કોઈ વેપાર નહીં, કોઈ સ્વાર્થ નહીં — માત્ર નિઃસ્વાર્થ ગૌસેવા, રક્ષણ અને કરુણા.'
+                    : 'Zero slaughter, zero commercial use, 100% unconditional seva and protection.'}
                 </p>
               </div>
             </div>
 
             {/* CTAs */}
             <div className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-1 gap-2.5 sm:gap-3">
-              <Button href="/gallery" variant="outline" size="sm" className="w-full justify-center text-xs sm:text-sm">
-                Full Gallery
+              <Button href="/gallery" variant="outline" size="sm" className="w-full justify-center text-xs sm:text-sm !h-10">
+                {isGu ? 'સંપૂર્ણ ગેલેરી' : 'Full Gallery'}
               </Button>
-              <Button href="/donate" heart size="sm" className="w-full justify-center text-xs sm:text-sm">
-                Sponsor a Cow
+              <Button href="/donate" heart size="sm" className="w-full justify-center text-xs sm:text-sm !h-10">
+                {isGu ? 'ગાય દત્તક લો' : 'Sponsor a Cow'}
               </Button>
             </div>
           </div>

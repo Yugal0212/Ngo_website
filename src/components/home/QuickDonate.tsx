@@ -2,30 +2,21 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AnimatePresence, m } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ShieldCheck } from 'lucide-react'
 
 import { Button } from '@/components/common/Button'
 import { Eyebrow } from '@/components/common/Eyebrow'
 import { LeafSprig } from '@/components/common/Icons'
-import { BRAND, COW_PLANS, EDU_PLANS, inr } from '@/config/site'
+import { inr } from '@/config/site'
 import { Cause } from '@/types'
 import { fadeUp, inView, stagger } from '@/lib/motion'
+import { useLanguage } from '@/context/LanguageContext'
 
-const QUICK = {
-  cow: [
-    { id: 'day', label: 'One day', amount: 200, does: 'One day of fresh fodder for one cow' },
-    { id: 'month', label: 'One month', amount: 6000, does: 'Keeps one cow fed at home for a month' },
-  ],
-  education: [
-    { id: 'stationery', label: 'Stationery', amount: 500, does: 'Notebooks, pencils and a geometry box' },
-    { id: 'food', label: 'Monthly food', amount: 1500, does: 'Daily meals for one child for a month' },
-  ],
-}
-
-/** A small donate widget: pick a cause, an amount, once or monthly. Full flow lives on /donate. */
+/** A small donate widget: pick a cause, an amount, once or monthly. Full flow lives on /donate. Mobile-first design. */
 export function QuickDonate({ initialCause = 'cow', onDonate }: { initialCause?: Cause; onDonate?: () => void }) {
   const router = useRouter()
+  const { t, isGu } = useLanguage()
   const [cause, setCause] = useState<Cause>(initialCause)
   const [preset, setPreset] = useState<string>('day')
   const [custom, setCustom] = useState('')
@@ -35,15 +26,21 @@ export function QuickDonate({ initialCause = 'cow', onDonate }: { initialCause?:
     setCause(initialCause)
   }, [initialCause])
 
-  const presets = cause === 'cow' ? QUICK.cow : QUICK.education
+  const presets = cause === 'cow' ? t.quickDonate.cowPlans : t.quickDonate.eduPlans
   const chosen = presets.find((p) => p.id === preset) ?? presets[0]
   const amount = preset === 'custom' ? Number(custom) || 0 : chosen.amount
   const does =
     preset === 'custom'
       ? amount >= 200
         ? cause === 'cow'
-          ? `About ${Math.floor(amount / 200)} day${amount >= 400 ? 's' : ''} of fresh fodder for one cow`
+          ? isGu
+            ? `આશરે ${Math.floor(amount / 200)} દિવસનો તાજો પૌષ્ટિક લીલો ઘાસચારો`
+            : `About ${Math.floor(amount / 200)} day${amount >= 400 ? 's' : ''} of fresh fodder for one cow`
+          : isGu
+          ? 'બાળકના ભોજન, પુસ્તકો અને શૈક્ષણિક સાધનોમાં સહાય'
           : 'Goes to food, books and stationery for a child'
+        : isGu
+        ? 'દરેક નાનો સહયોગ મહત્વનો છે — ન્યૂનતમ રકમ ₹૧૦૦ છે'
         : 'Every rupee helps — the minimum is ₹100'
       : chosen.does
 
@@ -60,26 +57,25 @@ export function QuickDonate({ initialCause = 'cow', onDonate }: { initialCause?:
         whileInView="show"
         viewport={inView}
         variants={stagger}
-        className="relative mx-auto grid max-w-[1388px] items-center gap-10 overflow-hidden rounded-[32px] bg-peach-100 px-5 py-10 sm:px-10 md:py-14 lg:grid-cols-[1fr_minmax(0,500px)] lg:gap-16 lg:rounded-[48px_48px_48px_140px] lg:px-16 lg:py-16"
+        className="relative mx-auto grid max-w-[1388px] items-center gap-8 sm:gap-10 overflow-hidden rounded-[28px] sm:rounded-[32px] bg-peach-100 px-4 py-8 sm:px-8 md:py-14 lg:grid-cols-[1fr_minmax(0,500px)] lg:gap-16 lg:rounded-[48px_48px_48px_140px] lg:px-16 lg:py-16"
       >
         <LeafSprig className="pointer-events-none absolute -right-2 -top-4 w-20 rotate-180 text-sand-300" />
         <m.div variants={fadeUp} className="relative">
-          <Eyebrow>Give in a Minute</Eyebrow>
+          <Eyebrow>{t.quickDonate.eyebrow}</Eyebrow>
           <h2
             id="donate-title"
-            className="mt-3 font-display text-[30px] font-bold leading-[1.15] tracking-[-0.01em] text-ink-900 md:text-[44px]"
+            className="mt-2.5 sm:mt-3 font-display text-2xl sm:text-[30px] font-bold leading-[1.2] sm:leading-[1.15] tracking-[-0.01em] text-ink-900 md:text-[44px]"
           >
-            Be the reason a cow is <span className="text-rust-600">never left alone.</span>
+            {t.quickDonate.title} <span className="text-rust-600">{t.quickDonate.titleHighlight}</span>
           </h2>
-          <p className="mt-5 max-w-[480px] text-base leading-[1.65] text-ink-700 md:text-lg">
-            Choose what feels right. We’ll send you a photo update from the Gushala so you can see where your
-            gift went.
+          <p className="mt-3.5 sm:mt-5 max-w-[480px] text-sm sm:text-base leading-[1.65] text-ink-700 md:text-lg">
+            {t.quickDonate.lead}
           </p>
-          <dl className="mt-8 grid max-w-[480px] grid-cols-2 gap-x-8 gap-y-5 border-t border-rust-600/15 pt-6">
-            {[...COW_PLANS.slice(0, 2), ...EDU_PLANS.slice(0, 2)].map((p) => (
+          <dl className="mt-6 sm:mt-8 grid max-w-[480px] grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5 border-t border-rust-600/15 pt-5 sm:pt-6">
+            {[...t.quickDonate.cowPlans, ...t.quickDonate.eduPlans].map((p) => (
               <div key={p.id}>
-                <dt className="font-display text-xl font-bold text-ink-900">{inr(p.amount)}</dt>
-                <dd className="mt-1 text-sm leading-snug text-ink-500">{p.does}</dd>
+                <dt className="font-display text-lg sm:text-xl font-bold text-ink-900">{inr(p.amount)}</dt>
+                <dd className="mt-0.5 text-xs sm:text-sm leading-snug text-ink-600">{p.does}</dd>
               </div>
             ))}
           </dl>
@@ -95,7 +91,7 @@ export function QuickDonate({ initialCause = 'cow', onDonate }: { initialCause?:
             else params.set('plan', preset)
             router.push(`/donate?${params.toString()}`)
           }}
-          className="relative rounded-3xl bg-cream-50 p-5 shadow-soft sm:p-8"
+          className="relative rounded-2xl sm:rounded-3xl bg-cream-50 p-4 sm:p-7 shadow-soft"
           aria-label="Quick donation"
         >
           {/* Cause tabs */}
@@ -107,111 +103,113 @@ export function QuickDonate({ initialCause = 'cow', onDonate }: { initialCause?:
                 role="tab"
                 aria-selected={cause === c}
                 onClick={() => switchCause(c)}
-                className="relative h-11 rounded-full font-display text-[15px] font-semibold"
+                className="relative h-11 rounded-full font-display text-xs sm:text-[15px] font-bold transition-colors"
               >
                 {cause === c && (
                   <m.span
                     layoutId="cause-pill"
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute inset-0 rounded-full bg-rust-600"
+                    className="absolute inset-0 rounded-full bg-rust-600 shadow-xs"
                   />
                 )}
                 <span className={`relative ${cause === c ? 'text-white' : 'text-ink-700'}`}>
-                  {c === 'cow' ? 'Feed a Cow' : 'Help a Child'}
+                  {c === 'cow' ? t.quickDonate.feedCow : t.quickDonate.helpChild}
                 </span>
               </button>
             ))}
           </div>
 
-          {/* Presets */}
-          <fieldset className="mt-6">
-            <legend className="text-sm font-medium text-ink-500">Amount</legend>
-            <div className="mt-3 grid grid-cols-3 gap-2.5">
-              {[...presets, { id: 'custom', amount: 0, label: 'Custom', does: '' }].map((p) => {
-                const on = preset === p.id
+          {/* Frequency toggle */}
+          <div className="mt-4 flex rounded-full bg-cream-100 p-1 text-xs sm:text-sm font-semibold">
+            <button
+              type="button"
+              onClick={() => setMonthly(false)}
+              className={`flex-1 rounded-full py-2 transition-colors ${
+                !monthly ? 'bg-brown-900 text-white shadow-xs' : 'text-ink-700 hover:text-ink-900'
+              }`}
+            >
+              {t.quickDonate.once}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMonthly(true)}
+              className={`flex-1 rounded-full py-2 transition-colors ${
+                monthly ? 'bg-brown-900 text-white shadow-xs' : 'text-ink-700 hover:text-ink-900'
+              }`}
+            >
+              {t.quickDonate.monthly}
+            </button>
+          </div>
+
+          {/* Preset options */}
+          <fieldset className="mt-5">
+            <legend className="sr-only">Choose an amount</legend>
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+              {presets.map((p) => {
+                const active = preset === p.id
                 return (
                   <button
                     key={p.id}
                     type="button"
-                    aria-pressed={on}
-                    onClick={() => setPreset(p.id)}
-                    className={`flex min-h-[64px] flex-col items-center justify-center rounded-2xl border-[1.5px] px-2 py-2 transition-[background-color,border-color] duration-150 ease-out ${
-                      on ? 'border-rust-600 bg-peach-100' : 'border-line hover:border-rust-600/50'
+                    onClick={() => {
+                      setPreset(p.id)
+                      setCustom('')
+                    }}
+                    className={`flex flex-col items-start rounded-2xl border-2 p-3 text-left transition-all active:scale-[0.98] ${
+                      active
+                        ? 'border-rust-600 bg-peach-100/70 shadow-xs'
+                        : 'border-line bg-cream-100/50 hover:border-rust-600/40'
                     }`}
                   >
-                    <span className="font-display text-lg font-bold text-ink-900">
-                      {p.id === 'custom' ? 'Custom' : inr(p.amount)}
-                    </span>
-                    <span className="text-xs text-ink-500">{p.id === 'custom' ? 'Any amount' : p.label}</span>
+                    <span className="font-display text-base sm:text-lg font-bold text-ink-900">{inr(p.amount)}</span>
+                    <span className="text-xs text-ink-600 font-medium">{p.label}</span>
                   </button>
                 )
               })}
             </div>
+
+            {/* Custom amount */}
+            <div className="mt-3">
+              <label htmlFor="quick-custom" className="sr-only">
+                {t.quickDonate.customAmount}
+              </label>
+              <div className="relative">
+                <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-display text-base font-bold text-ink-500">
+                  ₹
+                </span>
+                <input
+                  id="quick-custom"
+                  type="number"
+                  inputMode="numeric"
+                  min="100"
+                  step="50"
+                  placeholder={t.quickDonate.customPlaceholder}
+                  value={custom}
+                  onFocus={() => setPreset('custom')}
+                  onChange={(e) => {
+                    setPreset('custom')
+                    setCustom(e.target.value)
+                  }}
+                  className={`h-12 w-full rounded-2xl border-2 bg-cream-100/50 pl-9 pr-4 text-base font-medium text-ink-900 outline-none transition-colors ${
+                    preset === 'custom' ? 'border-rust-600 bg-peach-100/70' : 'border-line focus:border-rust-600'
+                  }`}
+                />
+              </div>
+            </div>
           </fieldset>
 
-          <AnimatePresence initial={false}>
-            {preset === 'custom' && (
-              <m.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="overflow-hidden"
-              >
-                <label className="mt-4 flex h-12 items-center gap-2 rounded-2xl border-[1.5px] border-line bg-cream-50 px-4 focus-within:border-rust-600">
-                  <span className="font-display font-bold text-ink-900">₹</span>
-                  <span className="sr-only">Custom amount in rupees</span>
-                  <input
-                    inputMode="numeric"
-                    value={custom}
-                    onChange={(e) => setCustom(e.target.value.replace(/\D/g, '').slice(0, 7))}
-                    placeholder="Enter amount"
-                    className="h-full w-full bg-transparent text-base text-ink-900 outline-none placeholder:text-ink-500"
-                  />
-                </label>
-              </m.div>
-            )}
-          </AnimatePresence>
-
-          <p aria-live="polite" className="mt-4 min-h-[24px] text-[15px] text-leaf-600">
+          {/* Outcome explanation note */}
+          <p className="mt-4 min-h-[38px] text-xs sm:text-sm text-ink-700 font-medium leading-relaxed bg-peach-100/40 p-2.5 rounded-xl border border-line/40">
             {does}
           </p>
 
-          {/* Frequency */}
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-line pt-5">
-            <span className="text-[15px] text-ink-700">Make it monthly</span>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={monthly}
-              aria-label="Give monthly"
-              onClick={() => setMonthly((v) => !v)}
-              className={`relative h-7 w-12 shrink-0 rounded-full transition-[background-color] duration-150 ease-out ${
-                monthly ? 'bg-rust-600' : 'bg-peach-200'
-              }`}
-            >
-              <span
-                className={`absolute left-1 top-1 h-5 w-5 rounded-full bg-cream-50 shadow transition-transform duration-150 ease-out ${
-                  monthly ? 'translate-x-5' : ''
-                }`}
-              />
-            </button>
-          </div>
+          <Button type="submit" heart size="lg" className="mt-5 w-full justify-center !h-12 !text-[15px] sm:!text-[17px]">
+            {t.quickDonate.btnProceed}
+          </Button>
 
-          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-ink-500">
-              <span className="block text-sm">{monthly ? 'Every month' : 'One-time'}</span>
-              <span className="font-display text-3xl font-extrabold tabular-nums text-ink-900">{inr(amount)}</span>
-            </p>
-            <Button type="submit" heart size="lg" className="w-full sm:w-auto">
-              Donate
-            </Button>
-          </div>
-
-          <p className="mt-5 flex items-start gap-2 text-xs leading-relaxed text-ink-500">
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-leaf-600" aria-hidden />
-            Secure payment via UPI, cards or netbanking. {BRAND.legalName} — {BRAND.registrationStatus.toLowerCase()}, so
-            tax receipts aren’t available yet.
+          <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[11px] sm:text-xs text-ink-500">
+            <ShieldCheck className="h-3.5 w-3.5 text-leaf-600 shrink-0" />
+            <span>{t.quickDonate.safety}</span>
           </p>
         </m.form>
       </m.div>

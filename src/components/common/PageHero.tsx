@@ -7,6 +7,7 @@ import { ChevronRight } from 'lucide-react'
 
 import { ease } from '@/lib/motion'
 import { LeafSprig } from './Icons'
+import { useLanguage } from '@/context/LanguageContext'
 
 type Props = {
   crumb: string
@@ -24,6 +25,8 @@ const item = {
 
 /** Inner-page header: copy first, image in a soft arch-and-blob shape. Mobile shows copy first, compact image. */
 export function PageHero({ crumb, eyebrow, title, lead, image, children }: Props) {
+  const { isGu } = useLanguage()
+
   return (
     <section className="relative -mt-20 overflow-hidden pt-20 lg:-mt-[96px] lg:pt-[96px]">
       {/* cream blob under the nav Donate button */}
@@ -38,7 +41,7 @@ export function PageHero({ crumb, eyebrow, title, lead, image, children }: Props
       <LeafSprig className="anim-sway absolute left-0 top-[150px] hidden w-12 text-rust-600/50 md:block" />
 
       <div
-        className={`relative mx-auto grid max-w-[1500px] items-center gap-8 px-5 pb-14 pt-6 md:px-10 md:pb-20 lg:gap-16 xl:px-[90px] ${
+        className={`relative mx-auto grid max-w-[1500px] items-center gap-6 sm:gap-8 px-4 sm:px-6 pb-10 pt-4 sm:pb-14 sm:pt-6 md:px-10 md:pb-20 lg:gap-16 xl:px-[90px] ${
           image ? 'lg:grid-cols-[1.05fr_1fr]' : ''
         }`}
       >
@@ -49,36 +52,36 @@ export function PageHero({ crumb, eyebrow, title, lead, image, children }: Props
           className={image ? '' : 'max-w-[820px]'}
         >
           <m.nav variants={item} aria-label="Breadcrumb">
-            <ol className="flex items-center gap-1.5 text-sm text-ink-500">
+            <ol className="flex items-center gap-1.5 text-xs sm:text-sm text-ink-500">
               <li>
-                <Link href="/" className="hover:text-rust-600">
-                  Home
+                <Link href="/" className="hover:text-rust-600 transition-colors">
+                  {isGu ? 'મુખ્ય પૃષ્ઠ' : 'Home'}
                 </Link>
               </li>
               <li aria-hidden>
-                <ChevronRight className="h-3.5 w-3.5" />
+                <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
               </li>
-              <li aria-current="page" className="font-medium text-rust-600">
+              <li aria-current="page" className="font-semibold text-rust-600">
                 {crumb}
               </li>
             </ol>
           </m.nav>
           {eyebrow && (
-            <m.p variants={item} className="mt-6 inline-flex rounded-full bg-peach-100 px-4 py-1.5 text-sm font-medium text-ink-900">
+            <m.p variants={item} className="mt-4 sm:mt-6 inline-flex rounded-full bg-peach-100 px-3.5 py-1 text-xs sm:text-sm font-medium text-ink-900 shadow-xs">
               {eyebrow}
             </m.p>
           )}
           <m.h1
             variants={item}
-            className="mt-4 font-display text-[length:clamp(2.1rem,2.6vw+1rem,3.75rem)] font-bold leading-[1.08] tracking-[-0.02em] text-ink-900"
+            className="mt-3 font-display text-[length:clamp(1.85rem,2.8vw+0.8rem,3.75rem)] font-bold leading-[1.12] tracking-[-0.02em] text-ink-900"
           >
             {title}
           </m.h1>
-          <m.p variants={item} className="mt-5 max-w-[560px] text-base leading-[1.65] text-ink-700 md:text-lg">
+          <m.p variants={item} className="mt-3.5 sm:mt-5 max-w-[560px] text-sm sm:text-base leading-[1.65] text-ink-700 md:text-lg">
             {lead}
           </m.p>
           {children && (
-            <m.div variants={item} className="mt-8">
+            <m.div variants={item} className="mt-6 sm:mt-8">
               {children}
             </m.div>
           )}
@@ -86,20 +89,18 @@ export function PageHero({ crumb, eyebrow, title, lead, image, children }: Props
 
         {image && (
           <m.div
-            initial={{ opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, ease, delay: 0.1 }}
-            className="relative ml-8 sm:ml-20 lg:ml-0"
+            transition={{ duration: 0.4, ease }}
+            className="relative order-first mx-auto w-full max-w-[460px] sm:max-w-none lg:order-last"
           >
-            <div aria-hidden className="anim-drift absolute -bottom-4 -left-4 h-[70%] w-[55%] rounded-[48px] bg-sand-200 lg:-bottom-6 lg:-left-6" />
-            <div className="relative aspect-[16/10] max-h-[240px] w-full overflow-hidden rounded-[120px_28px_28px_28px] shadow-soft sm:max-h-none lg:aspect-[5/4] lg:rounded-[180px_32px_32px_32px]">
+            <div className="relative aspect-[16/11] overflow-hidden rounded-[24px_48px_24px_48px] sm:rounded-[40px_80px_40px_80px] shadow-soft ring-4 ring-cream-100">
               <img
                 src={image.src}
                 alt={image.alt}
                 width={image.w}
                 height={image.h}
                 loading="eager"
-                fetchPriority="high"
                 className="h-full w-full object-cover"
               />
             </div>

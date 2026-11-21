@@ -6,12 +6,31 @@ import { AnimatePresence, m } from 'framer-motion'
 import { Check, Copy, Share2, X } from 'lucide-react'
 
 import { IMAGES } from '@/lib/images'
-import { fadeUp, inView, stagger } from '@/lib/motion'
+import { fadeUp, stagger } from '@/lib/motion'
+import { useLanguage } from '@/context/LanguageContext'
 
-const CATEGORIES = ['All', 'Cow care', 'Volunteers', 'Shiksha', 'Medical', 'Family support']
+const CATEGORIES_EN = [
+  { id: 'All', label: 'All' },
+  { id: 'Cow care', label: 'Cow care' },
+  { id: 'Volunteers', label: 'Volunteers' },
+  { id: 'Shiksha', label: 'Shiksha' },
+  { id: 'Medical', label: 'Medical' },
+  { id: 'Family support', label: 'Family support' },
+]
+
+const CATEGORIES_GU = [
+  { id: 'All', label: 'તમામ' },
+  { id: 'Cow care', label: 'ગૌસેવા' },
+  { id: 'Volunteers', label: 'સ્વયંસેવકો' },
+  { id: 'Shiksha', label: 'શિક્ષા' },
+  { id: 'Medical', label: 'સારવાર' },
+  { id: 'Family support', label: 'પરિવાર સહાય' },
+]
 
 export function GalleryView() {
   const searchParams = useSearchParams()
+  const { isGu } = useLanguage()
+
   const initialCat = searchParams.get('cat') || 'All'
   const isShareOpen = searchParams.get('share') === '1'
 
@@ -28,6 +47,8 @@ export function GalleryView() {
       setShowShareModal(true)
     }
   }, [searchParams])
+
+  const categories = isGu ? CATEGORIES_GU : CATEGORIES_EN
 
   const allItems = [
     ...IMAGES.gallery,
@@ -49,22 +70,22 @@ export function GalleryView() {
   }
 
   return (
-    <div className="mx-auto max-w-[1500px] px-5 py-10 md:px-10 md:py-16 xl:px-[90px]">
+    <div className="mx-auto max-w-[1500px] px-4 sm:px-6 md:px-10 py-8 md:py-16 xl:px-[90px]">
       {/* Categories Bar & Share Action */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap gap-2 scrollbar-none">
-          {CATEGORIES.map((cat) => {
-            const active = activeCategory === cat
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap gap-2 no-scrollbar">
+          {categories.map((c) => {
+            const active = activeCategory === c.id
             return (
               <button
-                key={cat}
+                key={c.id}
                 type="button"
-                onClick={() => setActiveCategory(cat)}
-                className={`h-9 sm:h-11 shrink-0 rounded-full px-4 sm:px-5 font-display text-xs sm:text-sm font-semibold transition-[background-color,color] duration-150 ${
-                  active ? 'bg-rust-600 text-white' : 'border border-line bg-cream-50 text-ink-700 hover:bg-peach-100'
+                onClick={() => setActiveCategory(c.id)}
+                className={`h-9 sm:h-11 shrink-0 rounded-full px-4 sm:px-5 font-display text-xs sm:text-sm font-bold transition-all active:scale-95 ${
+                  active ? 'bg-rust-600 text-white shadow-xs' : 'border border-line bg-cream-50 text-ink-700 hover:bg-peach-100'
                 }`}
               >
-                {cat}
+                {c.label}
               </button>
             )
           })}
@@ -73,10 +94,10 @@ export function GalleryView() {
         <button
           type="button"
           onClick={() => setShowShareModal(true)}
-          className="inline-flex h-9 sm:h-11 items-center gap-2 rounded-full border border-rust-600/40 px-4 sm:px-5 font-display text-xs sm:text-sm font-semibold text-ink-900 hover:bg-peach-100 hover:border-rust-600 self-start sm:self-auto"
+          className="inline-flex h-9 sm:h-11 items-center gap-2 rounded-full border border-rust-600/40 px-4 sm:px-5 font-display text-xs sm:text-sm font-bold text-ink-900 hover:bg-peach-100 hover:border-rust-600 self-start sm:self-auto active:scale-95 transition-all"
         >
           <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-rust-600" />
-          Share the Cause
+          {isGu ? 'સેવા સંદેશ શેર કરો' : 'Share the Cause'}
         </button>
       </div>
 
@@ -106,9 +127,9 @@ export function GalleryView() {
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
               />
-              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex items-center gap-1.5 rounded-full bg-cream-50/90 px-2 py-0.5 sm:px-3 sm:py-1 backdrop-blur-sm">
-                <span className="text-[10px] sm:text-[11px] font-semibold tracking-wide text-ink-900">
-                  ▷ {item.cat}
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex items-center gap-1.5 rounded-full bg-cream-50/90 px-2.5 py-0.5 sm:px-3 sm:py-1 backdrop-blur-sm shadow-xs">
+                <span className="text-[10px] sm:text-[11px] font-bold text-ink-900">
+                  {item.cat}
                 </span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-brown-900/60 via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100 flex items-end p-2.5 sm:p-5">
@@ -129,38 +150,29 @@ export function GalleryView() {
             onClick={() => setSelectedPhoto(null)}
             className="fixed inset-0 z-50 flex items-center justify-center bg-brown-900/85 p-3 sm:p-4 backdrop-blur-sm"
           >
-            <div
+            <m.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-2xl sm:rounded-3xl bg-cream-50 shadow-lift border border-line"
+              className="relative max-h-[90vh] max-w-3xl overflow-hidden rounded-2xl sm:rounded-3xl bg-cream-50 p-2 sm:p-3 shadow-lift"
             >
               <button
                 type="button"
                 onClick={() => setSelectedPhoto(null)}
-                aria-label="Close"
-                className="absolute right-3 top-3 z-10 grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-full bg-cream-50/90 text-ink-900 hover:bg-peach-100 shadow-md"
+                className="absolute right-4 top-4 z-10 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-cream-50/80 text-ink-900 hover:bg-cream-50"
               >
-                <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                <X className="h-5 w-5" />
               </button>
-              <div className="max-h-[50vh] sm:max-h-[72vh] w-full bg-ink-900 flex items-center justify-center overflow-hidden">
-                <img
-                  src={selectedPhoto.src}
-                  alt={selectedPhoto.alt}
-                  className="max-h-[50vh] sm:max-h-[72vh] w-full object-contain"
-                />
-              </div>
-              <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-t border-line">
-                <div>
-                  <span className="text-[10px] sm:text-xs font-bold text-rust-600 uppercase tracking-wider">{selectedPhoto.cat}</span>
-                  <p className="mt-0.5 text-xs sm:text-base font-medium text-ink-900 leading-snug">{selectedPhoto.alt}</p>
-                </div>
-                <a
-                  href="/donate"
-                  className="inline-flex h-9 sm:h-10 items-center justify-center gap-2 rounded-full bg-rust-600 px-4 sm:px-5 text-xs sm:text-sm font-semibold text-white hover:bg-rust-500 shrink-0"
-                >
-                  Support This Seva
-                </a>
-              </div>
-            </div>
+              <img
+                src={selectedPhoto.src}
+                alt={selectedPhoto.alt}
+                className="max-h-[75vh] w-full rounded-xl sm:rounded-2xl object-cover"
+              />
+              <p className="p-3 text-center text-xs sm:text-sm font-medium text-ink-700">
+                {selectedPhoto.alt}
+              </p>
+            </m.div>
           </m.div>
         )}
       </AnimatePresence>
@@ -175,40 +187,45 @@ export function GalleryView() {
             onClick={() => setShowShareModal(false)}
             className="fixed inset-0 z-50 flex items-center justify-center bg-brown-900/60 p-4 backdrop-blur-sm"
           >
-            <div
+            <m.div
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-md rounded-3xl bg-cream-50 p-6 sm:p-8 shadow-lift border border-line"
             >
-              <div className="flex items-center justify-between">
-                <h3 className="font-display text-xl font-bold text-ink-900">Spread Compassion</h3>
-                <button
-                  type="button"
-                  onClick={() => setShowShareModal(false)}
-                  className="grid h-9 w-9 place-items-center rounded-full text-ink-700 hover:bg-peach-100"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <p className="mt-3 text-sm text-ink-700 leading-relaxed">
-                Sharing our work brings new donors, volunteers, and protection to cows in need. Copy our website link to share on WhatsApp or social media.
+              <button
+                type="button"
+                onClick={() => setShowShareModal(false)}
+                className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-ink-500 hover:bg-peach-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <Share2 className="h-10 w-10 text-rust-600" />
+              <h3 className="mt-4 font-display text-xl font-bold text-ink-900">
+                {isGu ? 'ગૌસેવાનો પવિત્ર સંદેશ શેર કરો' : 'Spread the Kindness'}
+              </h3>
+              <p className="mt-2 text-xs sm:text-sm text-ink-700 leading-relaxed">
+                {isGu
+                  ? 'આપની એક શેર કોઈ અબોલ ગાયને ભૂખ્યા રહેવાથી બચાવી શકે છે અને બાળકને શાળા સુધી પહોંચાડી શકે છે.'
+                  : 'Every share brings a new donor, a volunteer, or a family that can now keep their cow safe.'}
               </p>
-              <div className="mt-5 flex items-center gap-2 rounded-2xl border border-line bg-cream-100 p-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={typeof window !== 'undefined' ? window.location.origin : 'https://gauseva.org'}
-                  className="w-full bg-transparent px-3 text-sm text-ink-900 outline-none"
-                />
+
+              <div className="mt-6 flex items-center justify-between rounded-2xl border border-line bg-cream-100 p-2.5">
+                <span className="truncate text-xs text-ink-500 max-w-[200px] sm:max-w-[240px]">
+                  {typeof window !== 'undefined' ? window.location.href : 'https://gauseva.org'}
+                </span>
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-xl bg-rust-600 px-3.5 text-xs font-semibold text-white hover:bg-rust-500"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-rust-600 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-rust-700 active:scale-95 transition-all"
                 >
                   {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                  {copied ? 'Copied!' : 'Copy'}
+                  {copied ? (isGu ? 'કોપી થઈ ગયું!' : 'Copied!') : (isGu ? 'લિંક કોપી' : 'Copy')}
                 </button>
               </div>
-            </div>
+            </m.div>
           </m.div>
         )}
       </AnimatePresence>

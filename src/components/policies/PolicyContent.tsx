@@ -1,6 +1,9 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
 import { BRAND, CONTACT } from '@/config/site'
+import { useLanguage } from '@/context/LanguageContext'
 
 type PolicyDoc = 'privacy' | 'terms' | 'donation'
 
@@ -9,23 +12,25 @@ type Props = {
 }
 
 export function PolicyContent({ activeDoc }: Props) {
+  const { isGu } = useLanguage()
+
   const tabs = [
-    { id: 'privacy', label: 'Privacy Policy', href: '/privacy-policy' },
-    { id: 'terms', label: 'Terms of Use', href: '/terms' },
-    { id: 'donation', label: 'Donation Policy', href: '/donation-policy' },
+    { id: 'privacy', label: isGu ? 'ગોપનીયતા નીતિ (Privacy)' : 'Privacy Policy', href: '/privacy-policy' },
+    { id: 'terms', label: isGu ? 'નિયમો અને શરતો (Terms)' : 'Terms of Use', href: '/terms' },
+    { id: 'donation', label: isGu ? 'દાન નીતિ (Donation Policy)' : 'Donation Policy', href: '/donation-policy' },
   ]
 
   return (
-    <div className="mx-auto max-w-[960px] px-5 py-12 md:py-20">
+    <div className="mx-auto max-w-[960px] px-4 sm:px-6 py-8 sm:py-12 md:py-20">
       {/* Tabs */}
-      <div className="flex border-b border-line mb-10 overflow-x-auto gap-4">
+      <div className="flex border-b border-line mb-8 overflow-x-auto gap-3 sm:gap-4 no-scrollbar">
         {tabs.map((tab) => {
           const active = activeDoc === tab.id
           return (
             <Link
               key={tab.id}
               href={tab.href}
-              className={`pb-4 font-display text-base font-semibold whitespace-nowrap border-b-2 transition-colors ${
+              className={`pb-3 font-display text-xs sm:text-base font-bold whitespace-nowrap border-b-2 transition-colors ${
                 active ? 'border-rust-600 text-rust-600' : 'border-transparent text-ink-500 hover:text-ink-900'
               }`}
             >
@@ -35,81 +40,65 @@ export function PolicyContent({ activeDoc }: Props) {
         })}
       </div>
 
-      <div className="prose prose-rust max-w-none space-y-6 text-base text-ink-700 leading-relaxed">
+      <div className="prose prose-rust max-w-none space-y-5 text-sm sm:text-base text-ink-700 leading-relaxed">
         {activeDoc === 'privacy' && (
           <>
-            <h1 className="font-display text-3xl font-bold text-ink-900">Privacy Policy</h1>
-            <p className="text-sm text-ink-500">Last updated: March 2025</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink-900">
+              {isGu ? 'ગોપનીયતા નીતિ (Privacy Policy)' : 'Privacy Policy'}
+            </h1>
+            <p className="text-xs text-ink-500">Last updated: March 2025</p>
 
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">1. Information We Collect</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">1. Information We Collect</h2>
             <p>
               When you donate, volunteer, or contact us through {BRAND.name} (operated by {BRAND.legalName}), we collect details such as your name, email address, phone number, and optional dedication notes.
             </p>
 
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">2. How We Use Your Information</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">2. How We Use Your Information</h2>
             <p>
-              We use your contact details solely to confirm donations, share photo updates of the animals and children supported, and keep you informed of our activities. We never sell, rent, or trade your personal information to third parties.
+              Your contact information is strictly used for sending donation receipts, WhatsApp photo updates from the Gushala, and coordination for volunteering. We never sell, rent, or share personal data with commercial advertisers.
             </p>
 
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">3. Data Security & Payment Information</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">3. Payment Security</h2>
             <p>
-              All online payment transactions are processed securely via verified third-party payment gateways. We do not store credit card, debit card, or netbanking credentials on our servers.
-            </p>
-
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">4. Contact Us</h2>
-            <p>
-              If you have any questions regarding your personal data or wish to have your details removed from our records, please reach us at <a href={`mailto:${CONTACT.email}`} className="text-rust-600 underline">{CONTACT.email}</a>.
+              All online payments are processed through secure, RBI-authorized UPI and banking gateways. We do not store credit card or netbanking PINs on our servers.
             </p>
           </>
         )}
 
         {activeDoc === 'terms' && (
           <>
-            <h1 className="font-display text-3xl font-bold text-ink-900">Terms of Service</h1>
-            <p className="text-sm text-ink-500">Last updated: March 2025</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink-900">
+              {isGu ? 'નિયમો અને શરતો (Terms of Use)' : 'Terms of Use'}
+            </h1>
+            <p className="text-xs text-ink-500">Last updated: March 2025</p>
 
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">1. Acceptance of Terms</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">1. Overview</h2>
             <p>
-              By accessing and using this website, you agree to comply with and be bound by these terms. This site is created to support the humanitarian and animal welfare work of {BRAND.legalName} under the banner of {BRAND.name}.
+              By accessing {BRAND.name}, you agree to support our mission of compassionate animal welfare and child education in accordance with these terms.
             </p>
 
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">2. Use of Content</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">2. Registration Status</h2>
             <p>
-              Photographs, stories, and written material on this website reflect actual beneficiaries and Gushala activities. Respecting the privacy and dignity of village families and children, reproduction without consent is strictly prohibited.
-            </p>
-
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">3. Transparency & Disclaimers</h2>
-            <p>
-              All content is provided in good faith. Figures provided on website sections reflect current operating approximations and volunteer estimates, to be replaced by formal audited statements upon registration completion.
+              {BRAND.legalName} is currently operating with registration in progress. Donations directly support fodder procurement, shelter upkeep, and children’s educational supplies.
             </p>
           </>
         )}
 
         {activeDoc === 'donation' && (
           <>
-            <h1 className="font-display text-3xl font-bold text-ink-900">Donation & Transparency Policy</h1>
-            <p className="text-sm text-ink-500">Last updated: March 2025</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-ink-900">
+              {isGu ? 'દાન નીતિ (Donation Policy)' : 'Donation Policy'}
+            </h1>
+            <p className="text-xs text-ink-500">Last updated: March 2025</p>
 
-            <div className="rounded-2xl bg-peach-100 p-5 border border-rust-600/20">
-              <p className="font-display font-semibold text-rust-700">Important Legal Notice</p>
-              <p className="mt-1 text-sm text-ink-700">
-                {BRAND.legalName} is currently registered as: <strong>{BRAND.registrationStatus}</strong>. We do not currently issue Section 80G tax deduction receipts, 12A exemption certificates, or accept foreign currency contributions under FCRA until all certifications are finalized.
-              </p>
-            </div>
-
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">1. Utilization of Contributions</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">1. Transparent Utilization</h2>
             <p>
-              100% of voluntary contributions received through {BRAND.name} are channelled into purchasing green fodder, feed, veterinary medicines, and educational supplies for school children.
+              Every rupee donated is dedicated towards green fodder, animal medicine, nutritious food, and stationery kits for children as outlined in our fund allocation breakdown.
             </p>
 
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">2. Donor Updates & Receipts</h2>
+            <h2 className="font-display text-lg sm:text-xl font-bold text-ink-900 mt-5">2. Photo Proof & Accountability</h2>
             <p>
-              Every donor receives an electronic receipt confirmation via email. For designated cow and education sponsorships, donors receive periodic photo updates directly from the shelter and delivery rounds.
-            </p>
-
-            <h2 className="font-display text-xl font-bold text-ink-900 mt-6">3. Refund Policy</h2>
-            <p>
-              Because contributions directly fund immediate animal feed procurement and daily school meals, donations are considered non-refundable. If an erroneous transaction or duplicate debit occurs, please email <a href={`mailto:${CONTACT.email}`} className="text-rust-600 underline">{CONTACT.email}</a> within 7 days for assistance.
+              Donors receive digital photo receipts and WhatsApp updates showcasing the fodder feeding rounds and student tutoring sessions.
             </p>
           </>
         )}

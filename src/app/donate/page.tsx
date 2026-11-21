@@ -1,21 +1,26 @@
+'use client'
+
 import React, { Suspense } from 'react'
 import { PageShell } from '@/components/common/PageShell'
 import { PageHero } from '@/components/common/PageHero'
 import { DonateForm } from '@/components/donate/DonateForm'
 import { IMAGES } from '@/lib/images'
+import { useLanguage } from '@/context/LanguageContext'
 
 export default function DonatePage() {
+  const { t } = useLanguage()
+
   return (
     <PageShell active="get involved" hideDonate>
       <PageHero
-        crumb="Donate"
-        eyebrow="Direct & Transparent Care"
+        crumb={t.donatePage.crumb}
+        eyebrow={t.donatePage.eyebrow}
         title={
           <>
-            Be the reason a cow is <span className="text-rust-600">fed & loved</span>
+            {t.donatePage.title1} <span className="text-rust-600">{t.donatePage.titleHighlight}</span>
           </>
         }
-        lead="Every rupee goes directly to fresh fodder, medicines and schooling supplies. Choose a one-time gift or monthly pledge."
+        lead={t.donatePage.lead}
         image={IMAGES.missionCow}
       />
       <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center text-ink-500">Loading donation form...</div>}>

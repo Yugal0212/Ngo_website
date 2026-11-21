@@ -7,6 +7,7 @@ import { ArrowUp } from 'lucide-react'
 import { ClipPaths } from './ClipPaths'
 import { Footer } from './Footer'
 import { Navbar } from './Navbar'
+import { useLanguage } from '@/context/LanguageContext'
 
 type Props = {
   /** Lower-case nav label to mark active: 'home', 'about', 'our work', 'gallery', 'get involved', 'contact'. */
@@ -19,6 +20,7 @@ type Props = {
 /** Every page: skip link, sticky nav, mobile bottom nav, footer, and back-to-top button. */
 export function PageShell({ active, hideDonate = false, children }: Props) {
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const { isGu } = useLanguage()
 
   useEffect(() => {
     let ticking = false
@@ -41,13 +43,13 @@ export function PageShell({ active, hideDonate = false, children }: Props) {
   return (
     <LazyMotion features={domAnimation}>
       <MotionConfig reducedMotion="user">
-        <div className="min-h-full bg-cream-50 font-sans text-ink-700 pb-16 lg:pb-0">
+        <div className="min-h-full bg-cream-50 font-sans text-ink-700 pb-20 sm:pb-24 lg:pb-0">
           <ClipPaths />
           <a
             href="#main"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-rust-600 focus:px-5 focus:py-3 focus:text-white"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-rust-600 focus:px-5 focus:py-3 focus:text-white font-medium"
           >
-            Skip to content
+            {isGu ? 'મુખ્ય વિષયવસ્તુ પર જાઓ' : 'Skip to content'}
           </a>
           <Navbar active={active} hideDonate={hideDonate} />
           <main id="main" className="anim-fast-fade-up">

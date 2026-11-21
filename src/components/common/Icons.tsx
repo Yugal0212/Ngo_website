@@ -15,23 +15,43 @@ const base = (size: number) => ({
   'aria-hidden': true,
 })
 
+/**
+ * Sacred, gentle Indian Gau Mata (Desi Gir Cow) line art.
+ * Features:
+ * - Peaceful pendulous drooping ears (maternal and calm, NOT upright aggressive bull ears)
+ * - Soft, small curved feminine horns (NOT sharp long bull horns)
+ * - Sacred Tilak / Chandlo on forehead
+ * - Gentle kind eyes and smiling muzzle
+ */
 const COW_HEAD_PATHS = [
-  'M24 17 C17 16 11 12 10 4 C14 9 19 11 25 12',
-  'M40 17 C47 16 53 12 54 4 C50 9 45 11 39 12',
-  'M23 22 C17 21 11 19 6 17 C9 23 15 27 23 27',
-  'M41 22 C47 21 53 19 58 17 C55 23 49 27 41 27',
-  'M23 18 C24 14 28 13 32 13 C36 13 40 14 41 18 L40 37 C40 42 41 45 40 48',
-  'M23 18 L24 37 C24 42 23 45 24 48',
-  'M24 48 C24 54 27 58 32 58 C37 58 40 54 40 48 C38 46 26 46 24 48 Z',
-  'M29 52 h0.01 M35 52 h0.01',
-  'M26 31 q2 1.6 4 0 M34 31 q2 1.6 4 0',
-  'M29 17 q3 3 6 0',
+  // Sacred Tilak / Chandlo on forehead
+  'M32 17 C30.8 19.2 29.5 21.2 29.5 23 A2.5 2.5 0 0 0 34.5 23 C34.5 21.2 33.2 19.2 32 17 Z',
+  // Small, soft curved horns (gentle and rounded, NOT sharp bull spikes)
+  'M26 15 C23 11 20 10 19 11.5 C18.2 13 21 15 24 17',
+  'M38 15 C41 11 44 10 45 11.5 C45.8 13 43 15 40 17',
+  // Gir cow soft pendulous drooping ears (peaceful, motherly)
+  'M24 18 C17 19 10 24 8 29 C7.5 31.5 9 33 11.5 32 C16 30 20 26 23 23',
+  'M40 18 C47 19 54 24 56 29 C56.5 31.5 55 33 52.5 32 C48 30 44 26 41 23',
+  // Crown between ears
+  'M24 17 C28 15.5 36 15.5 40 17',
+  // Gentle cheek curves tapering to muzzle
+  'M23 23 C22 28 23 35 24 40 L25 46',
+  'M41 23 C42 28 41 35 40 40 L39 46',
+  // Soft, sweet rounded muzzle & chin
+  'M25 46 C24 52.5 27.5 56.5 32 56.5 C36.5 56.5 40 52.5 39 46 C37 44.5 27 44.5 25 46 Z',
+  // Peaceful gentle smile
+  'M29.5 52.5 Q32 54.5 34.5 52.5',
+  // Soft nostrils
+  'M29 49.5 h0.01 M35 49.5 h0.01',
+  // Kind, gentle eyes with soft gaze
+  'M24.5 31 C26.5 29.5 28.5 30 29.5 32',
+  'M39.5 31 C37.5 29.5 35.5 30 34.5 32',
 ]
 
-/** Line-art cow head used in the logo. `draw` animates the strokes in (splash). */
+/** Line-art sacred Gau Mata head used in the logo. `draw` animates the strokes in (splash). */
 export function CowHead({ size = 56, draw = false, ...rest }: IconProps & { draw?: boolean }) {
   return (
-    <svg viewBox="0 0 64 64" strokeWidth={2.2} {...base(size)} {...rest}>
+    <svg viewBox="0 0 64 64" strokeWidth={2} {...base(size)} {...rest}>
       {COW_HEAD_PATHS.map((d, i) =>
         draw ? (
           <m.path
@@ -98,28 +118,25 @@ export function HandsHeartIcon({ size = 44, ...rest }: IconProps) {
 export function CowIcon({ size = 64, ...rest }: IconProps) {
   return (
     <svg viewBox="0 0 64 48" strokeWidth={2} {...base(size)} {...rest}>
-      <path d="M8 20 C9 16 12 15 16 15 H42 C45 15 47 13 49 10" />
-      <path d="M49 10 L47 5 M52 10 L55 6" />
-      <path d="M48 11 L44 9" />
-      <path d="M49 10 C53 11 57 14 58 17 C58 19 56 20 54 20 L51 20 C50 23 48 25 46 26" />
-      <path d="M46 26 V42 M41 28 V42" />
-      <path d="M13 28 V42 M18 30 V42" />
-      <path d="M13 28 C10 26 8 23 8 20" />
-      <path d="M18 30 C26 31 34 30 41 28" />
-      <path d="M8 20 C6 24 6 30 7 34" />
+      <path d="M12 20 C12 16 14 13 18 12 L22 11 L25 7 C26 5 28 5 29 6 L30 10 L34 10 L35 6 C36 5 38 5 39 7 L42 11 L46 12 C50 13 52 16 52 20 L51 32 C51 36 48 38 45 38 L19 38 C16 38 13 36 13 32 Z" />
+      <path d="M18 38 L18 44" />
+      <path d="M46 38 L46 44" />
+      <circle cx="24" cy="22" r="1.5" />
+      <circle cx="40" cy="22" r="1.5" />
+      <path d="M28 28 C30 30 34 30 36 28" />
     </svg>
   )
 }
 
-export function LeafSprig({ className = '', ...rest }: React.SVGProps<SVGSVGElement>) {
+export function LeafSprig(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 80 120" fill="currentColor" aria-hidden className={className} {...rest}>
-      <path d="M8 118 C20 90 34 62 52 30" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M50 34 C44 22 46 10 54 2 C60 12 58 26 50 34 Z" />
-      <path d="M38 58 C24 56 16 48 14 38 C26 38 36 46 38 58 Z" />
-      <path d="M41 56 C52 50 64 52 72 58 C62 66 50 64 41 56 Z" opacity="0.8" />
-      <path d="M26 84 C16 78 12 68 14 60 C22 64 27 74 26 84 Z" opacity="0.85" />
-      <path d="M29 82 C38 76 50 78 56 84 C46 90 36 88 29 82 Z" opacity="0.7" />
+    <svg viewBox="0 0 60 120" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M30 115 C30 80 32 40 30 5 C29 40 27 80 30 115 Z" />
+      <path d="M30 95 C18 90 12 78 14 68 C22 70 28 82 30 95 Z" />
+      <path d="M30 80 C42 75 48 63 46 53 C38 55 32 67 30 80 Z" />
+      <path d="M30 60 C18 55 12 43 14 33 C22 35 28 47 30 60 Z" />
+      <path d="M30 45 C42 40 48 28 46 18 C38 20 32 32 30 45 Z" />
+      <path d="M30 25 C22 20 18 12 20 4 C25 6 29 14 30 25 Z" />
     </svg>
   )
 }
